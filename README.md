@@ -49,12 +49,12 @@ js/nutrition.js      aba Refeições (calorias, proteínas e carboidratos)
 js/sync.js           fotos compartilhadas entre Torneio e Refeições
 js/settings.js       configurações dentro do Perfil (torneio, atividades, alimentos)
 js/app.js            telas, formulários e validação
-supabase/schema.sql esquema completo do banco (tabelas, RLS e bucket de fotos)
+supabase/            schema.sql, tournament.sql, rules.sql, profile.sql, settings.sql, wipe.sql, tournament-delete.sql, nutrition.sql, gct.sql, photo-sync.sql, shared-meals.sql
 ```
 
 ## Como rodar com o seu Supabase
 1. Crie um projeto gratuito em supabase.com.
-2. No **SQL Editor**, rode o arquivo `supabase/schema.sql` inteiro (cria as tabelas, as regras de segurança e o bucket privado de fotos).
+2. No **SQL Editor**, rode os arquivos de `supabase/`, nesta ordem: `schema.sql`, `tournament.sql`, `rules.sql`, `profile.sql`, `settings.sql`, `wipe.sql`, `tournament-delete.sql`, `nutrition.sql`, `gct.sql`, `photo-sync.sql`, `shared-meals.sql`.
 3. Em **Authentication → Users**, crie os usuários (e-mail e senha) e desative o cadastro aberto.
 4. Em `js/config.js`, coloque a Project URL e a chave publishable do seu projeto.
 5. Abra o `index.html` ou publique a pasta em uma hospedagem estática, como Netlify ou GitHub Pages.
@@ -68,20 +68,5 @@ A chave publishable é pública por design e pode ficar no código. Nunca coloqu
 - Novas conquistas: array `ACHIEVEMENTS` em `js/stats.js`
 - Ícones: `js/icons.js`
 
-## Decisões técnicas
-- **Sem framework e sem build:** HTML, CSS e JavaScript puros, para entender cada parte e publicar só arrastando a pasta.
-- **Supabase como backend:** Postgres, autenticação e armazenamento de arquivos prontos; o frontend conversa direto com o banco.
-- **Segurança no banco (RLS), não no frontend:** as regras decidem quem lê e edita cada linha e cada arquivo.
-- **Cache em memória no `storage.js`:** as leituras ficam síncronas e só as gravações são assíncronas, o que simplificou as telas.
-- **Fotos comprimidas no navegador** (até 1280 px, JPEG) antes do envio; o bucket é privado e as fotos aparecem por links temporários.
-- **Fórmulas conhecidas:** MET para o gasto das atividades e Mifflin-St Jeor para o GCT.
-- **Ícones sem biblioteca:** `js/icons.js` troca os emojis por SVG.
-
-## Limitações
-- Não há testes automatizados.
-- Parte da lógica (pontos do torneio, GCT, sincronização de fotos) roda no navegador. Numa versão com API própria, ela iria para o servidor.
-- Os valores nutricionais são aproximados e editáveis; o app não substitui um nutricionista.
-- Não funciona offline, e o plano gratuito do Supabase pausa projetos sem uso.
-
 ## Próximas ideias
-Hospedar na AWS (S3 + CloudFront), lembretes de treino, mais estatísticas e domínio próprio.
+Lembretes de treino, mais estatísticas, integração com relógios e domínio próprio.

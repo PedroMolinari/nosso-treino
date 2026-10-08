@@ -12,7 +12,7 @@ async function fillSettings() {
       <ul class="list">${Object.entries(CONFIG.activities).map(([k, v]) => `<li class="row"><span${v.active === false ? ' class="muted"' : ''}>${esc(v.icon)} ${esc(v.label)}${v.active === false ? ' (oculta)' : ''}</span><button class="ghost" data-s="type" data-key="${k}">Editar</button></li>`).join('')}</ul>
       <button class="btn block" data-s="type">+ Adicionar atividade</button></section>
     <section class="card"><h2>🍽️ Alimentos</h2><p class="muted">Valores por 100 g, usados na aba Refeições.</p>
-      <ul class="list">${N.foods.map(f => `<li class="row"><span${f.active ? '' : ' class="muted"'}>${esc(f.name)}<br><small>${g1(f.kcal)} kcal • P ${g1(f.protein)} • C ${g1(f.carbs)} • G ${g1(f.fat)}${f.portion_grams ? ` • 1 ${esc(f.portion_name)} = ${g1(f.portion_grams)} g` : ''}</small></span><button class="ghost" data-n="food" data-id="${f.id}">Editar</button></li>`).join('') || '<li class="muted">Nada ainda. Rode o supabase/schema.sql.</li>'}</ul>
+      <ul class="list">${N.foods.map(f => `<li class="row"><span${f.active ? '' : ' class="muted"'}>${esc(f.name)}<br><small>${g1(f.kcal)} kcal • P ${g1(f.protein)} • C ${g1(f.carbs)} • G ${g1(f.fat)}${f.portion_grams ? ` • 1 ${esc(f.portion_name)} = ${g1(f.portion_grams)} g` : ''}</small></span><button class="ghost" data-n="food" data-id="${f.id}">Editar</button></li>`).join('') || '<li class="muted">Nada ainda. Rode o SQL nutrition.sql.</li>'}</ul>
       <button class="btn block" data-n="food">+ Adicionar alimento</button></section>
     <details class="card"><summary>Zona de perigo</summary><p class="muted">Apaga só os seus dados e reinicia o seu perfil. Os da outra pessoa não são afetados.</p><button class="ghost block danger" data-s="wipe">Apagar meus dados</button></details>`;
 }
@@ -36,7 +36,7 @@ async function saveType(f) {
   let slug = norm(label).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'atividade';
   while (!key && CONFIG.activities[slug]) slug += '-2';
   const { error } = key ? await q.update(row).eq('key', key) : await q.insert({ ...row, key: slug });
-  if (error) return fail('Não foi possível salvar. Confira se rodou o schema.sql no Supabase.');
+  if (error) return fail('Não foi possível salvar. Confira se rodou o SQL settings.sql no Supabase.');
   await storage.load(); closeDlg(); fillSettings(); toast('✓ Atividade salva!');
 }
 
@@ -60,7 +60,7 @@ async function wipeMyData(f) {
   for (const t of ['meal_records', 'daily_entries', 'activities', 'weight_records', 'nutrition_meals']) {
     await db.from(t).delete().eq('user_id', id);
     const { count } = await db.from(t).select('*', { count: 'exact', head: true }).eq('user_id', id);
-    if (count) return fail('Não foi possível apagar tudo. Confira se rodou o schema.sql no Supabase.');
+    if (count) return fail('Não foi possível apagar tudo. Confira se rodou o SQL wipe.sql no Supabase.');
   }
   if (!(await storage.updateUser(id, PROFILE_DEFAULTS))) return fail('Não foi possível reiniciar o perfil. Tente novamente.');
   await storage.signOut(); location.reload();

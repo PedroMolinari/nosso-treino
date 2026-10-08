@@ -36,7 +36,7 @@ async function renderMeals() {
     N.meals = data; N.urls = {};
     const paths = data.map(m => m.photo_path).filter(Boolean);
     if (paths.length) { const { data: u } = await storage.db.storage.from('meal-photos').createSignedUrls(paths, 3600); (u || []).forEach(x => { if (x.signedUrl) N.urls[x.path] = x.signedUrl; }); }
-  } catch (e) { console.error(e); $('#app').innerHTML = '<p>Não foi possível carregar as refeições. Confira se rodou o <code>supabase/schema.sql</code>.</p>'; return; }
+  } catch (e) { console.error(e); $('#app').innerHTML = '<p>Não foi possível carregar as refeições. Confira se rodou os SQLs <code>nutrition.sql</code> e <code>gct.sql</code>.</p>'; return; }
   drawMeals();
 }
 
@@ -118,7 +118,7 @@ async function saveNMeal(f) {
   }
   const q = storage.db.from('nutrition_meals');
   const { error } = id ? await q.update(row).eq('id', id) : await q.insert({ ...row, user_id: uid, date: N.date });
-  if (error) return fail('Não foi possível salvar. Confira se rodou o schema.sql e tente novamente.');
+  if (error) return fail('Não foi possível salvar. Confira se rodou os SQLs gct.sql e photo-sync.sql e tente novamente.');
   const oldPath = N.file && old ? old.photo_path : null;
   await syncFromNutrition({ date: N.date, meal_type: type, items: row.items, description: old && old.description, photo_path: row.photo_path || (old && old.photo_path) }, oldPath);
   if (oldPath) await dropIfUnused(oldPath);

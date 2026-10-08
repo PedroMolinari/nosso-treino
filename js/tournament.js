@@ -59,7 +59,7 @@ async function tLoad() {
 
 async function renderTournament() {
   $('#app').innerHTML = '<p class="muted">Carregando torneio...</p>';
-  try { await tLoad(); } catch (e) { console.error(e); $('#app').innerHTML = '<p>Não foi possível carregar o torneio. Confira se rodou o <code>supabase/schema.sql</code>.</p>'; return; }
+  try { await tLoad(); } catch (e) { console.error(e); $('#app').innerHTML = '<p>Não foi possível carregar o torneio. Confira se rodou os SQLs <code>supabase/tournament.sql</code> e <code>supabase/rules.sql</code>.</p>'; return; }
   drawTournament();
 }
 
@@ -211,7 +211,7 @@ async function deleteTournament(f) {
   if (error) return fail('Não foi possível excluir. Tente novamente.');
   await db.from('tournaments').delete().eq('id', id); // os registros do torneio saem em cascata
   const { count } = await db.from('tournaments').select('*', { count: 'exact', head: true }).eq('id', id);
-  if (count) return fail('Não foi possível excluir. Confira se rodou o schema.sql no Supabase.');
+  if (count) return fail('Não foi possível excluir. Confira se rodou o SQL tournament-delete.sql no Supabase.');
   const paths = data.map(m => m.photo_path).filter(Boolean);
   for (const p of paths) await dropIfUnused(p);
   closeDlg(); T.date = null; renderTournament(); toast('✓ Torneio excluído');

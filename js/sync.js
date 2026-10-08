@@ -5,7 +5,7 @@ const BUCKET = 'meal-photos';
 async function dropIfUnused(path) {
   if (!path) return;
   const { data } = await storage.db.rpc('photo_in_use', { p: path });
-  if (data === false) await storage.db.storage.from(BUCKET).remove([path]); // se a função photo_in_use não existir no banco, não apaga
+  if (data === false) await storage.db.storage.from(BUCKET).remove([path]); // se o SQL photo-sync não foi rodado, não apaga
 }
 
 async function removePhotoEverywhere(path) {

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-accent="green">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#34d399">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nosso Treino">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Nosso Treino</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <span class="brand"><img src="icons/icon-round-192.png" alt="" width="30" height="30">Nosso Treino</span>
+  <button id="menuBtn" class="avatar" aria-label="Menu da conta"></button>
+</header>
+<nav class="nav" aria-label="Principal">
+  <a href="#inicio" data-r="inicio"><i>🏠</i>Início</a>
+  <a href="#atividades" data-r="atividades"><i>📊</i>Atividades</a>
+  <button data-a="add" class="nav-add"><i>➕</i>Registrar</button>
+  <a href="#refeicoes" data-r="refeicoes"><i>🍽️</i>Refeições</a>
+  <a href="#torneio" data-r="torneio"><i>🏆</i>Torneio</a>
+</nav>
+<main id="app"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"></dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/calories.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/tournament.js"></script>
+<script src="js/nutrition.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
